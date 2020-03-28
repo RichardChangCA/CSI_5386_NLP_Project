@@ -28,12 +28,13 @@ from keras.layers import LSTM, Embedding, TimeDistributed, Dense, RepeatVector,\
 from keras.optimizers import Adam, RMSprop
 from keras.layers.wrappers import Bidirectional
 from keras.layers.merge import add
-from keras.applications.inception_v3 import InceptionV3
+from tensorflow.keras.applications import InceptionV3
+#from keras.applications.inception_v3 import InceptionV3
 from keras.preprocessing import image
 from keras.models import Model
 from keras import Input, layers
 from keras import optimizers
-from keras.applications.inception_v3 import preprocess_input
+from tensorflow.keras.applications.inception_v3 import preprocess_input
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from keras.utils import to_categorical
@@ -143,6 +144,59 @@ def load_clean_descriptions(filename, dataset):
 			descriptions[image_id].append(desc)
 	return descriptions
 
+filename = "/home/lingfeng/Downloads/flicker8k-dataset/Flickr8k_text/Flickr8k.token.txt"
+# load descriptions
+doc = load_doc(filename)
+# parse descriptions
+descriptions = load_descriptions(doc)
+# clean descriptions
+clean_descriptions(descriptions)
+# summarize vocabulary
+vocabulary = to_vocabulary(descriptions)
+save_descriptions(descriptions, '/home/lingfeng/Downloads/flicker8k-dataset/Pickle/descriptions.txt')
+# load training dataset (6K)
+filename = '/home/lingfeng/Downloads/flicker8k-dataset/Flickr8k_text/Flickr_8k.trainImages.txt'
+train = load_set(filename)
+
+# Below path contains all the images
+images = '/home/lingfeng/Downloads/flicker8k-dataset/Flickr8k_Dataset/Flicker8k_Dataset/'
+# Create a list of all image names in the directory
+img = glob.glob(images + '*.jpg')
+
+# Below file conatains the names of images to be used in train data
+train_images_file = '/home/lingfeng/Downloads/flicker8k-dataset/Flickr8k_text/Flickr_8k.trainImages.txt'
+# Read the train image names in a set
+train_images = set(open(train_images_file, 'r').read().strip().split('\n'))
+
+# Create a list of all the training images with their full path names
+train_img = []
+
+for i in img: # img is list of full path names of all images
+    if i[len(images):] in train_images: # Check if the image belongs to training set
+        train_img.append(i) # Add it to the list of train images
+
+# Below file conatains the names of images to be used in test data
+test_images_file = '/home/lingfeng/Downloads/flicker8k-dataset/Flickr8k_text/Flickr_8k.testImages.txt'
+# Read the validation image names in a set# Read the test image names in a set
+test_images = set(open(test_images_file, 'r').read().strip().split('\n'))
+
+# Create a list of all the test images with their full path names
+test_img = []
+
+for i in img: # img is list of full path names of all images
+    if i[len(images):] in test_images: # Check if the image belongs to test set
+        test_img.append(i) # Add it to the list of test images
+
+# descriptions
+train_descriptions = load_clean_descriptions('/home/lingfeng/Downloads/flicker8k-dataset/Pickle/descriptions.txt', train)
+
+# Load the inception v3 model
+model = InceptionV3(include_top=False,weights='imagenet')
+#model = InceptionV3()
+
+# Create a new model, by removing the last layer (output layer) from the inception v3
+model_new = Model(model.input, model.layers[-1].output)
+
 def preprocess(image_path):
     # Convert all the images to size 299x299 as expected by the inception v3 model
     img = image.load_img(image_path, target_size=(299, 299))
@@ -182,6 +236,9 @@ def data_generator(descriptions, photos, wordtoix, max_length, num_photos_per_ba
         for key, desc_list in descriptions.items():
             n+=1
             # retrieve the photo feature
+            print("*"*50)
+            print(photos)
+            print(photos[key+'.jpg'])
             photo = photos[key+'.jpg']
             for desc in desc_list:
                 # encode the sequence
@@ -220,57 +277,6 @@ def greedySearch(photo):
     final = ' '.join(final)
     return final
 
-filename = "/home/lingfeng/Downloads/flicker8k-dataset/Flickr8k_text/Flickr8k.token.txt"
-# load descriptions
-doc = load_doc(filename)
-# parse descriptions
-descriptions = load_descriptions(doc)
-# clean descriptions
-clean_descriptions(descriptions)
-# summarize vocabulary
-vocabulary = to_vocabulary(descriptions)
-save_descriptions(descriptions, '/home/lingfeng/Downloads/flicker8k-dataset/Pickle/descriptions.txt')
-# load training dataset (6K)
-filename = '/home/lingfeng/Downloads/flicker8k-dataset/Flickr8k_text/Flickr_8k.trainImages.txt'
-train = load_set(filename)
-
-# Below path contains all the images
-images = '/home/lingfeng/Downloads/flicker8k-dataset/Flickr8k_Dataset/'
-# Create a list of all image names in the directory
-img = glob.glob(images + '*.jpg')
-
-# Below file conatains the names of images to be used in train data
-train_images_file = '/home/lingfeng/Downloads/flicker8k-dataset/Flickr8k_text/Flickr_8k.trainImages.txt'
-# Read the train image names in a set
-train_images = set(open(train_images_file, 'r').read().strip().split('\n'))
-
-# Create a list of all the training images with their full path names
-train_img = []
-
-for i in img: # img is list of full path names of all images
-    if i[len(images):] in train_images: # Check if the image belongs to training set
-        train_img.append(i) # Add it to the list of train images
-
-# Below file conatains the names of images to be used in test data
-test_images_file = '/home/lingfeng/Downloads/flicker8k-dataset/Flickr8k_text/Flickr_8k.testImages.txt'
-# Read the validation image names in a set# Read the test image names in a set
-test_images = set(open(test_images_file, 'r').read().strip().split('\n'))
-
-# Create a list of all the test images with their full path names
-test_img = []
-
-for i in img: # img is list of full path names of all images
-    if i[len(images):] in test_images: # Check if the image belongs to test set
-        test_img.append(i) # Add it to the list of test images
-
-# descriptions
-train_descriptions = load_clean_descriptions('/home/lingfeng/Downloads/flicker8k-dataset/Pickle/descriptions.txt', train)
-
-# Load the inception v3 model
-model = InceptionV3(weights='imagenet')
-
-# Create a new model, by removing the last layer (output layer) from the inception v3
-model_new = Model(model.input, model.layers[-2].output)
 
 # Call the funtion to encode all the train images
 # This will take a while on CPU - Execute this only once
@@ -296,7 +302,7 @@ with open("/home/lingfeng/Downloads/flicker8k-dataset/Pickle/encoded_test_images
     pickle.dump(encoding_test, encoded_pickle)
 
 train_features = load(open("/home/lingfeng/Downloads/flicker8k-dataset/Pickle/encoded_train_images.pkl", "rb"))
-# print('Photos: train=%d' % len(train_features))
+print('Photos: train=%d' % len(train_features))
 
 # Create a list of all the training captions
 all_train_captions = []
@@ -388,7 +394,7 @@ for i in range(epochs):
 for i in range(epochs):
     generator = data_generator(train_descriptions, train_features, wordtoix, max_length, number_pics_per_bath)
     model.fit_generator(generator, epochs=1, steps_per_epoch=steps, verbose=1)
-    model.save('./model_weights/model_' + str(i) + '.h5')
+    model.save('./model_weights/model_' + str(10+i) + '.h5')
 
 model.optimizer.lr = 0.0001
 epochs = 10
@@ -398,18 +404,19 @@ steps = len(train_descriptions)//number_pics_per_bath
 for i in range(epochs):
     generator = data_generator(train_descriptions, train_features, wordtoix, max_length, number_pics_per_bath)
     model.fit_generator(generator, epochs=1, steps_per_epoch=steps, verbose=1)
-    #model.save('./model_weights/model_' + str(i) + '.h5')
+    model.save('./model_weights/model_' + str(20+i) + '.h5')
 
 model.save_weights('./model_weights/model_30.h5')
 
 model.load_weights('./model_weights/model_30.h5')
 
-images = '/home/lingfeng/Downloads/flicker8k-dataset/Flickr8k_Dataset/'
+images = '/home/lingfeng/Downloads/flicker8k-dataset/Flickr8k_Dataset/Flicker8k_Dataset/'
 
 with open("/home/lingfeng/Downloads/flicker8k-dataset/Pickle/encoded_test_images.pkl", "rb") as encoded_pickle:
     encoding_test = load(encoded_pickle)
 
 z+=1
+
 pic = list(encoding_test.keys())[z]
 image = encoding_test[pic].reshape((1,2048))
 x=plt.imread(images+pic)
