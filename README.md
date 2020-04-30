@@ -10,3 +10,5 @@ Contents: CNN encoders(VGG16,InceptionV3,MobileNet,ResNet) by transfer learning,
 You need download Flickr8k in person. In addtion, you need run ./Image_captioning_with_visual_attention/Image_captioning_with_visual_attention.py first to get annotation files and image datasets.
 
 Run ./Comparison/Comparison.py to get the final results.
+
+For implementation, please visit: https://github.com/RichardChangCA/Image_Captioning
