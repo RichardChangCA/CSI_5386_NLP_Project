@@ -13,6 +13,7 @@ RESULT_BASE_DIR = '../Comparison/final_results'
 attention_img_name = 'attention_plot.png'
 def upload(request):
     print("current path: ",os.getcwd())
+    os.chdir("../project_web_")
     context = {}
     if request.POST:
         img_file = request.FILES.get("image")
