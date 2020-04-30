@@ -1,0 +1,14 @@
+model_name: three_stacked_LSTM
+encoder_name: VGG16
+dataset_name: coco
+
+1-gram blue score: 0.1524322247041425
+2-gram blue score: 0.01330845755443996
+3-gram blue score: 0.0011769641801336757
+4-gram blue score: 0.00015790616426188724
+comulative blue score with weights (4,3,2,1): 0.013946383069224523
+
+CIDEr score: 0.027845504854744456
+
+METEOR score: 0.16766594119764514
+

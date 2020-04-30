@@ -1,0 +1,14 @@
+model_name: three_stacked_LSTM
+encoder_name: MobileNetV2
+dataset_name: coco
+
+1-gram blue score: 0.15148959389943487
+2-gram blue score: 0.014136436709303134
+3-gram blue score: 0.0015352848692339592
+4-gram blue score: 0.0002923643429448736
+comulative blue score with weights (4,3,2,1): 0.015888589361576243
+
+CIDEr score: 0.03336574169360298
+
+METEOR score: 0.16853707209262797
+

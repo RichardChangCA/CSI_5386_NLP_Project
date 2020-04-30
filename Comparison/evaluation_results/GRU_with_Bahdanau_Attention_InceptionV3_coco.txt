@@ -1,0 +1,14 @@
+model_name: GRU_with_Bahdanau_Attention
+encoder_name: InceptionV3
+dataset_name: coco
+
+1-gram blue score: 0.17066033789182947
+2-gram blue score: 0.014971382681581822
+3-gram blue score: 0.0016637111437733077
+4-gram blue score: 0.00037203800511313777
+comulative blue score with weights (4,3,2,1): 0.017648424026549776
+
+CIDEr score: 0.04815923498551573
+
+METEOR score: 0.1824451452598252
+

@@ -1,0 +1,14 @@
+model_name: GRU_with_Bahdanau_Attention
+encoder_name: ResNet50
+dataset_name: coco
+
+1-gram blue score: 0.17110360063196284
+2-gram blue score: 0.015039623455891772
+3-gram blue score: 0.0015793713852293421
+4-gram blue score: 0.00036335103625522895
+comulative blue score with weights (4,3,2,1): 0.017466433783691997
+
+CIDEr score: 0.04522177857736083
+
+METEOR score: 0.18346736671037592
+

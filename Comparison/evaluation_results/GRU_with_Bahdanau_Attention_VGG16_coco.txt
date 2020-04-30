@@ -1,0 +1,14 @@
+model_name: GRU_with_Bahdanau_Attention
+encoder_name: VGG16
+dataset_name: coco
+
+1-gram blue score: 0.16689491863885364
+2-gram blue score: 0.014504468874096644
+3-gram blue score: 0.00147502810563853
+4-gram blue score: 0.0003020931630399916
+comulative blue score with weights (4,3,2,1): 0.016565400625833237
+
+CIDEr score: 0.040649150916908586
+
+METEOR score: 0.18029441780793656
+

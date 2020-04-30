@@ -1,0 +1,14 @@
+model_name: three_stacked_LSTM
+encoder_name: ResNet50
+dataset_name: coco
+
+1-gram blue score: 0.1513211036964284
+2-gram blue score: 0.012819570780652193
+3-gram blue score: 0.0011513320271925717
+4-gram blue score: 0.00019367284538959512
+comulative blue score with weights (4,3,2,1): 0.013972330053153889
+
+CIDEr score: 0.02716575647821251
+
+METEOR score: 0.16698423589288444
+

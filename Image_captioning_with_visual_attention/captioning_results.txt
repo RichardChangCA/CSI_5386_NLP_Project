@@ -1,0 +1,1 @@
+Real Caption: <start> two large giraffe standing next to each other on a field <end>Prediction Caption: ['two', 'giraffes', 'close', 'to', 'a', 'pile', 'of', 'rocks', 'on', 'some', 'rocks', 'together', '<end>']
