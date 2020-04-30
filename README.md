@@ -11,4 +11,4 @@ You need download Flickr8k in person. In addtion, you need run ./Image_captionin
 
 Run ./Comparison/Comparison.py to get the final results.
 
-For implementation, please visit: https://github.com/RichardChangCA/Image_Captioning
+For application, please visit: https://github.com/RichardChangCA/Image_Captioning
