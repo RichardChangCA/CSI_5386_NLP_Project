@@ -13,7 +13,7 @@ Run ./Comparison/Comparison.py to get the final results.
 
 For application, please visit: https://github.com/RichardChangCA/Image_Captioning
 
-<h5>Some useful study links:</h5>
+<h3>Some useful study links:</h3>
 
 1. Attention in Neural Networks, image captioning: https://www.youtube.com/watch?v=W2rWgXJBZhU
 
